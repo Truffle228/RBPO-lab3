@@ -1,11 +1,33 @@
 package com.example.lab2.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "software_products")
 public class SoftwareProduct {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "responsible_id")
     private User responsible;
+
+    @ManyToOne
+    @JoinColumn(name = "current_version_id")
+    @JsonIgnore
     private Release currentVersion;
+
     public SoftwareProduct() {}
-    public SoftwareProduct(Long id, String name, User responsible, Release currentVersion) { this.id = id; this.name = name; this.responsible = responsible; this.currentVersion = currentVersion; }
+    public SoftwareProduct(String name, User responsible) {
+        this.name = name;
+        this.responsible = responsible;
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }

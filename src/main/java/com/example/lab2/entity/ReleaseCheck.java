@@ -1,14 +1,41 @@
 package com.example.lab2.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "release_checks")
 public class ReleaseCheck {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "release_id", nullable = false)
+    @JsonIgnore
     private Release release;
+
+    @Column(nullable = false)
     private String checkName;
+
+    @Column(nullable = false)
     private boolean mandatory;
+
     private String result;
+
+    @Column(nullable = false)
     private LocalDateTime checkedAt;
+
     public ReleaseCheck() {}
-    public ReleaseCheck(Long id, Release release, String checkName, boolean mandatory, String result, LocalDateTime checkedAt) { this.id = id; this.release = release; this.checkName = checkName; this.mandatory = mandatory; this.result = result; this.checkedAt = checkedAt; }
+    public ReleaseCheck(Release release, String checkName, boolean mandatory, String result) {
+        this.release = release;
+        this.checkName = checkName;
+        this.mandatory = mandatory;
+        this.result = result;
+        this.checkedAt = LocalDateTime.now();
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Release getRelease() { return release; }
